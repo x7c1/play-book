@@ -4,5 +4,10 @@ node_modules
 # gitbook
 _book
 
+# play-book
+hello-tutorial
+docs/**/*.js
+index.js
+
 # IntelliJ
 .idea
