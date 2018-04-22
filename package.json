@@ -2,9 +2,10 @@
   "name": "play-book",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "docs-gen/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:ts": "$(npm bin)/tsc --project .",
+    "test": "NODE_PATH=./docs-gen/general node ./docs-gen/index.js"
   },
   "author": "",
   "license": "CC-BY-NC-SA-4.0",
