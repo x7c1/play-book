@@ -1,4 +1,4 @@
-import { Chapter, run } from "book_assert";
+import { Chapter, run } from "book-assert";
 
 const chapter = new Chapter();
 

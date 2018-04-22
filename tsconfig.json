@@ -10,7 +10,7 @@
     "noImplicitThis": true,
     "outDir": "docs-gen",
     "paths": {
-      "book_assert": ["./general/book_assert"]
+      "book-assert": ["./general/book-assert"]
     },
     "strict": true,
     "target": "es5"

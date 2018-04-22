@@ -1,4 +1,4 @@
-import { Chapter } from "book_assert";
+import { Chapter } from "book-assert";
 
 const assertChapter = (dir: string) => {
   const chapter = require(dir).chapter as Chapter;
