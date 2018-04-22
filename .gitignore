@@ -7,7 +7,9 @@ _book
 # play-book
 hello-tutorial
 docs/**/*.js
+docs/**/*.d.ts
 index.js
+index.d.ts
 
 # IntelliJ
 .idea
