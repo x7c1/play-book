@@ -4,12 +4,11 @@ node_modules
 # gitbook
 _book
 
+# book-assert
+docs-gen
+
 # play-book
 hello-tutorial
-docs/**/*.js
-docs/**/*.d.ts
-index.js
-index.d.ts
 
 # IntelliJ
 .idea
