@@ -1,4 +1,5 @@
-import { spawn } from "child_process";
+import { exec, spawn } from "child_process";
+import { promisify } from "util";
 
 type ProcessData = Buffer | string;
 
@@ -22,6 +23,21 @@ const toRunner = (line: string) => ({
         reject(e);
       }
     }),
+
+  exec: () =>
+    Promise.resolve(0)
+      .then(_ => {
+        console.log(`[run] ${line}`);
+      })
+      .then(_ => promisify(exec)(line))
+      .then(({ stdout, stderr }) => {
+        if (typeof stderr === "string" && stderr.trim().length > 0) {
+          return Promise.reject(stderr);
+        } else {
+          console.log(stdout);
+          return Promise.resolve();
+        }
+      }),
 
   stream: (command: string, args: string[]) =>
     new Promise<void>((resolve, reject) => {
@@ -47,8 +63,10 @@ const run: (line: string) => Promise<void> = line => {
   switch (command) {
     case "cd":
       return runner.cd(args[0]);
-    default:
+    case "sbt":
       return runner.stream(command, args);
+    default:
+      return runner.exec();
   }
 };
 
