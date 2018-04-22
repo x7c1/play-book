@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": true,
+    "lib": ["es6"],
+    "noEmitOnError": true,
+    "noErrorTruncation": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "outDir": "docs-gen",
+    "paths": {
+      "book_assert": ["./general/book_assert"]
+    },
+    "strict": true,
+    "target": "es5"
+  },
+  "include": [
+    "index.ts",
+    "docs/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
