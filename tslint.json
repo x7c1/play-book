@@ -17,10 +17,10 @@
     ],
     // https://palantir.github.io/tslint/rules/no-empty/
     "no-empty": false,
-    // https://prettier.io/docs/en/options.html#trailing-commas
     "prettier": [
       true,
       {
+        // https://prettier.io/docs/en/options.html#trailing-commas
         "trailingComma": "all",
         "tabWidth": 2
       }
