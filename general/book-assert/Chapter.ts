@@ -8,7 +8,6 @@ export class SectionBinder {
   ) {}
 
   setup(procedure: (register: Section) => void): void {
-    console.log("running:", this.sectionLabel);
     const section = new Section(this.sectionLabel);
     this.bind(section);
     procedure(section);

@@ -15,7 +15,7 @@ const toRunner = (line: string) => ({
   cd: (dir: string) =>
     new Promise<void>((resolve, reject) => {
       try {
-        console.log(`\n[run] ${line}`);
+        console.log(`[run] ${line}`);
         process.chdir(dir);
         resolve();
       } catch (e) {
@@ -25,16 +25,16 @@ const toRunner = (line: string) => ({
 
   stream: (command: string, args: string[]) =>
     new Promise<void>((resolve, reject) => {
-      console.log(`\n[start] ${line}`);
+      console.log(`[start] ${line}`);
       const proc = spawn(command, args);
       proc.stderr.on("data", onProcessData(_ => console.error(_)));
       proc.stdout.on("data", onProcessData(_ => console.log(_)));
       proc.on("close", code => {
         if (code === 0) {
-          console.log(`\n[done] ${line}`);
+          console.log(`[done] ${line}`);
           resolve();
         } else {
-          console.error(`\n[failed] code(${code}): ${line}`);
+          console.error(`[failed] status(${code}): ${line}`);
           reject();
         }
       });

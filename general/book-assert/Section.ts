@@ -5,7 +5,13 @@ export class Section {
 
   private _assertions: Assertion[] = [];
 
-  constructor(readonly sectionLabel: string) {}
+  constructor(readonly sectionLabel: string) {
+    this._assertions.push(() =>
+      Promise.resolve(0).then(_ =>
+        console.log(`[section] ${this.sectionLabel}`),
+      ),
+    );
+  }
 
   assert(assert: Assertion): void {
     this._assertions.push(assert);
