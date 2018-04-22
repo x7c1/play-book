@@ -28,4 +28,13 @@ export class Chapter {
     const assertion = concat(assertions);
     return assertion();
   }
+
+  assertSection(sectionLabel: string): Promise<void> {
+    const section = this.sections.find(_ => _.sectionLabel === sectionLabel);
+    const assertion = section
+      ? section.extractAssertion()
+      : () => Promise.reject(`unknown section: ${sectionLabel}`);
+
+    return assertion();
+  }
 }
