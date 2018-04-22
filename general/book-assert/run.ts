@@ -11,18 +11,20 @@ const onProcessData = (listener: Listener<string>) => (data: ProcessData) => {
   }
 };
 
-const run: (line: string) => Promise<void> = (line: string) =>
-  new Promise((resolve, reject) => {
-    const [command, ...args] = line.split(" ");
-    if (command === "cd") {
+const toRunner = (line: string) => ({
+  cd: (dir: string) =>
+    new Promise<void>((resolve, reject) => {
       try {
         console.log(`\n[run] ${line}`);
-        process.chdir(args[0]);
+        process.chdir(dir);
         resolve();
       } catch (e) {
         reject(e);
       }
-    } else {
+    }),
+
+  stream: (command: string, args: string[]) =>
+    new Promise<void>((resolve, reject) => {
       console.log(`\n[start] ${line}`);
       const proc = spawn(command, args);
       proc.stderr.on("data", onProcessData(_ => console.error(_)));
@@ -36,7 +38,18 @@ const run: (line: string) => Promise<void> = (line: string) =>
           reject();
         }
       });
-    }
-  });
+    }),
+});
+
+const run: (line: string) => Promise<void> = line => {
+  const [command, ...args] = line.split(" ");
+  const runner = toRunner(line);
+  switch (command) {
+    case "cd":
+      return runner.cd(args[0]);
+    default:
+      return runner.stream(command, args);
+  }
+};
 
 export { run };
