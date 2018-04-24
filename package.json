@@ -4,6 +4,7 @@
   "description": "",
   "main": "docs-gen/general/main.js",
   "scripts": {
+    "gitbook": "gitbook serve",
     "build:ts": "$(npm bin)/tsc --project .",
     "test": "NODE_PATH=./docs-gen/general node ./docs-gen/index.js"
   },
