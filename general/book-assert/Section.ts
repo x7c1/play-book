@@ -5,10 +5,10 @@ export class Section {
 
   private _assertions: Assertion[] = [];
 
-  constructor(readonly sectionLabel: string) {
+  constructor(readonly sectionTitle: string) {
     this._assertions.push(() =>
       Promise.resolve(0).then(_ =>
-        console.log(`[section] ${this.sectionLabel}`),
+        console.log(`[section] ${this.sectionTitle}`),
       ),
     );
   }
