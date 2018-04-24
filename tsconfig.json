@@ -17,7 +17,8 @@
   },
   "include": [
     "index.ts",
-    "docs/**/*.ts"
+    "docs/**/*.ts",
+    "general/**/*.ts"
   ],
   "exclude": [
     "node_modules"
