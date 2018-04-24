@@ -51,7 +51,7 @@ const toRunner = (line: string) => ({
           resolve();
         } else {
           console.error(`[failed] status(${code}): ${line}`);
-          reject();
+          reject(code);
         }
       });
     }),
