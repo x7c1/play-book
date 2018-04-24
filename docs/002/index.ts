@@ -2,8 +2,8 @@ import { Chapter, run } from "book-assert";
 
 const chapter = new Chapter();
 
-chapter.section("事前準備").setup(section => {
-  const variables = {
+chapter.section("事前準備").setup(_ => {
+  const commands = {
     sbtNew: `sbt new x7c1/play-api-seed.g8
               --app_prefix=tutorial
               --name=hello-tutorial
@@ -13,15 +13,15 @@ chapter.section("事前準備").setup(section => {
 
     runTest: "sbt tutorial-play/test",
   };
-
-  section.assert(() =>
-    // run("rm -rf ./hello-tutorial")
-    run("ls -al")
-      .then(() => run(variables.sbtNew))
-      .then(() => run(variables.changeDir))
-      .then(() => run(variables.runTest)),
+  _.assert(() =>
+    run("rm -rf ./hello-tutorial")
+      // run("ls -al")
+      .then(() => run(commands.sbtNew))
+      .then(() => run(commands.changeDir))
+      .then(() => run(commands.runTest))
+      .then(() => run("cd ..")),
   );
-  section.reveal(variables);
+  _.reveal(commands);
 });
 
 export { chapter };
