@@ -2,7 +2,7 @@
   "name": "play-book",
   "version": "0.0.1",
   "description": "",
-  "main": "docs-gen/index.js",
+  "main": "docs-gen/general/main.js",
   "scripts": {
     "build:ts": "$(npm bin)/tsc --project .",
     "test": "NODE_PATH=./docs-gen/general node ./docs-gen/index.js"
@@ -10,6 +10,7 @@
   "author": "",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
+    "commander": "^2.15.1",
     "gitbook-cli": "^2.3.2"
   },
   "devDependencies": {
