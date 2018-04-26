@@ -1,3 +1,4 @@
+import * as path from "path";
 import { Section } from "./Section";
 import { concat } from "./Assertion";
 
@@ -14,8 +15,23 @@ export class SectionBinder {
   }
 }
 
+const here = (dirname: string) => {
+  const matches = dirname.match(/([^/]+\/\d+)$/);
+  if (matches === null) {
+    throw new Error(`invalid file location: ${dirname}`);
+  }
+  return (name: string) => path.resolve(matches[0], name);
+};
+
 export class Chapter {
   constructor(private sections: Section[] = []) {}
+
+  static fromHere(dirname: string) {
+    return {
+      chapter: new Chapter(),
+      here: here(dirname),
+    };
+  }
 
   section(sectionTitle: string): SectionBinder {
     return new SectionBinder(sectionTitle, traverser =>
