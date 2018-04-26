@@ -12,7 +12,8 @@
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
     "commander": "^2.15.1",
-    "gitbook-cli": "^2.3.2"
+    "gitbook-cli": "^2.3.2",
+    "gitbook-plugin-anchors": "^0.7.1"
   },
   "devDependencies": {
     "@types/node": "^9.6.6",
