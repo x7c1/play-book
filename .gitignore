@@ -1,1 +1,14 @@
+# node.js
 node_modules
+
+# gitbook
+_book
+
+# book-assert
+docs-gen
+
+# play-book
+hello-tutorial
+
+# IntelliJ
+.idea

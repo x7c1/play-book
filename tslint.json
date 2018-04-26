@@ -1,0 +1,29 @@
+{
+  "rulesDirectory": [
+    "tslint-plugin-prettier"
+  ],
+  "extends": [
+    "tslint-config-standard",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    // https://palantir.github.io/tslint/rules/trailing-comma/
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "always",
+        "singleline": "never"
+      }
+    ],
+    // https://palantir.github.io/tslint/rules/no-empty/
+    "no-empty": false,
+    "prettier": [
+      true,
+      {
+        // https://prettier.io/docs/en/options.html#trailing-commas
+        "trailingComma": "all",
+        "tabWidth": 2
+      }
+    ]
+  }
+}
