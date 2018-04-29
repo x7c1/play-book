@@ -13,7 +13,7 @@
   "dependencies": {
     "commander": "^2.15.1",
     "gitbook-cli": "^2.3.2",
-    "gitbook-plugin-anchors": "^0.7.1"
+    "gitbook-plugin-anchorjs": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^9.6.6",

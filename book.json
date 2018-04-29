@@ -1,0 +1,8 @@
+{
+  "plugins" : ["anchorjs"],
+  "pluginsConfig": {
+    "anchorjs": {
+      "selector": "h2"
+    }
+  }
+}
