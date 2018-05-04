@@ -2,11 +2,11 @@
   "name": "play-book",
   "version": "0.0.1",
   "description": "",
-  "main": "ts.book-assert.gen/general/main.js",
+  "main": "book-assert.ts.gen/general/main.js",
   "scripts": {
     "gitbook": "gitbook serve",
     "build:ts": "$(npm bin)/tsc --project .",
-    "test": "NODE_PATH=./ts.book-assert.gen/general node ./ts.book-assert.gen/index.js"
+    "test": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js"
   },
   "author": "",
   "license": "CC-BY-NC-SA-4.0",
