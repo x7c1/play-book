@@ -5,14 +5,14 @@ import * as path from "path";
 type Settings = {
   argv: string[];
   outDir: string;
-  docs: string;
+  docsDir: string;
   loader: (id: string) => Chapter;
 };
 
-const run = ({ argv, outDir, docs, loader }: Settings) => {
+const run = ({ argv, outDir, docsDir, loader }: Settings) => {
   const command = createCommand(argv);
   const chapter = () => {
-    return loader(path.resolve(outDir, docs, command.chapter));
+    return loader(path.resolve(outDir, docsDir, command.chapter));
   };
   if (command.chapter && command.section && command.single) {
     return chapter().assertSection(command.section);
