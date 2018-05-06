@@ -5,7 +5,7 @@ node_modules
 _book
 
 # book-assert
-book-assert.*.gen
+book-assert.ts.gen
 
 # play-book
 hello-tutorial

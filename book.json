@@ -1,5 +1,5 @@
 {
-  "root" : "book-assert.docs.gen",
+  "root" : "book-assert.docs",
   "plugins" : ["anchorjs"],
   "pluginsConfig": {
     "anchorjs": {
