@@ -2,7 +2,7 @@
 node_modules
 
 # gitbook
-_book
+book-assert.docs/_book
 
 # book-assert
 book-assert.ts.gen
