@@ -1,30 +1,50 @@
+import * as path from "path";
 import { Chapter } from "./Chapter";
 import { createCommand } from "./command";
-import * as path from "path";
+import { Book } from "./Book";
 
-type Settings = {
+export interface Settings {
   argv: string[];
-  outDir: string;
+  scriptsDir: string;
   docsDir: string;
-  loader: (id: string) => Chapter;
+  gitbookRoot: string;
+  load: (id: string) => any;
+}
+
+const load = (settings: Settings) => {
+  const { scriptsDir, docsDir, load } = settings;
+  const command = createCommand(settings.argv);
+  return {
+    loader: {
+      loadBook() {
+        const file = path.resolve(scriptsDir, docsDir);
+        return load(file).book as Book;
+      },
+      loadChapter() {
+        const file = path.resolve(scriptsDir, docsDir, command.chapter);
+        return load(file).chapter as Chapter;
+      },
+    },
+    command,
+  };
 };
 
-const run = ({ argv, outDir, docsDir, loader }: Settings) => {
-  const command = createCommand(argv);
-  const chapter = () => {
-    return loader(path.resolve(outDir, docsDir, command.chapter));
-  };
+const promiseOf = (settings: Settings) => {
+  const { command, loader } = load(settings);
+  if (command.serve) {
+    return loader.loadBook().serve(settings.docsDir, settings.gitbookRoot);
+  }
   if (command.chapter && command.section && command.single) {
-    return chapter().assertSection(command.section);
+    return loader.loadChapter().assertSection(command.section);
   }
   if (command.chapter && command.single) {
-    return chapter().assertSections();
+    return loader.loadChapter().assertSections();
   }
   throw new Error("not implemented");
 };
 
 export const main = (settings: Settings) => {
-  run(settings).catch(err => {
+  promiseOf(settings).catch(err => {
     console.error("[unexpected]", err);
     if (err.stdout) {
       console.error("[stdout]", err.stdout);

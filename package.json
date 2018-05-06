@@ -2,13 +2,13 @@
   "name": "play-book",
   "version": "0.0.1",
   "description": "",
-  "main": "book-assert.ts.gen/general/main.js",
   "scripts": {
-    "gitbook": "gitbook serve",
+    "gitbook": "gitbook serve ./book-assert.docs",
     "build:ts": "$(npm bin)/tsc --project .",
+    "serve": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js --serve",
     "test": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js"
   },
-  "author": "",
+  "author": "x7c1",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
     "chokidar": "^2.0.3",

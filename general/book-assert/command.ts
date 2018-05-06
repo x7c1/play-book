@@ -3,6 +3,7 @@ import { Command } from "commander";
 export const createCommand: (argv: string[]) => Command = argv =>
   new Command()
     .version("0.0.1")
+    .option("--serve", "serve a gitbook markdown files")
     .option("--chapter <number>", "chapter to assert", n => {
       const i = parseInt(n, 10);
       return isNaN(i) ? "" : i.toString().padStart(3, "0");
