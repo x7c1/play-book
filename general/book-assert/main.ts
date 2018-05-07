@@ -11,7 +11,7 @@ export interface Settings {
   load: (id: string) => any;
 }
 
-const load = (settings: Settings) => {
+const parse = (settings: Settings) => {
   const { scriptsDir, docsDir, load } = settings;
   const command = createCommand(settings.argv);
   return {
@@ -30,7 +30,7 @@ const load = (settings: Settings) => {
 };
 
 const promiseOf = (settings: Settings) => {
-  const { command, loader } = load(settings);
+  const { command, loader } = parse(settings);
   if (command.serve) {
     return loader.loadBook().serve(settings.docsDir, settings.gitbookRoot);
   }
