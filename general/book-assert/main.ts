@@ -19,7 +19,7 @@ const parse = (settings: Settings) => {
     loader: {
       loadBook() {
         const file = path.resolve(scriptsDir, docsDir);
-        return load(file).book as Book;
+        return load(file).loadBook(docsDir) as Book;
       },
       loadChapter() {
         const file = path.resolve(scriptsDir, docsDir, command.chapter);
