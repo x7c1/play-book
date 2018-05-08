@@ -1,4 +1,5 @@
 export { Book } from "./Book";
+export { BookIndex } from "./BookIndex";
 export { Chapter } from "./Chapter";
-export { run } from "./run";
 export { main } from "./main";
+export { run } from "./run";

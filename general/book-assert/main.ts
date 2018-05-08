@@ -17,9 +17,9 @@ const parse = (settings: Settings) => {
   const command = createCommand(settings.argv);
   return {
     loader: {
-      loadBook() {
+      loadBook(): Promise<Book> {
         const file = path.resolve(scriptsDir, docsDir);
-        return load(file).loadBook(docsDir) as Book;
+        return load(file).default.toBook(docsDir);
       },
       loadChapter() {
         const file = path.resolve(scriptsDir, docsDir, command.chapter);
@@ -30,10 +30,11 @@ const parse = (settings: Settings) => {
   };
 };
 
-const promiseOf = (settings: Settings) => {
+async function promiseOf(settings: Settings): Promise<void> {
   const { command, loader } = parse(settings);
   if (command.serve) {
-    return serve(loader.loadBook())({
+    const book = await loader.loadBook();
+    return serve(book)({
       src: settings.docsDir,
       dst: settings.gitbookRoot,
     });
@@ -45,7 +46,7 @@ const promiseOf = (settings: Settings) => {
     return loader.loadChapter().assertSections();
   }
   throw new Error("not implemented");
-};
+}
 
 export const main = (settings: Settings) => {
   promiseOf(settings).catch(err => {
