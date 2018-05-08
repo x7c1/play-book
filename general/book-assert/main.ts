@@ -2,6 +2,7 @@ import * as path from "path";
 import { Chapter } from "./Chapter";
 import { createCommand } from "./command";
 import { Book } from "./Book";
+import { serve } from "./serve";
 
 export interface Settings {
   argv: string[];
@@ -32,7 +33,10 @@ const parse = (settings: Settings) => {
 const promiseOf = (settings: Settings) => {
   const { command, loader } = parse(settings);
   if (command.serve) {
-    return loader.loadBook().serve(settings.docsDir, settings.gitbookRoot);
+    return serve(loader.loadBook())({
+      src: settings.docsDir,
+      dst: settings.gitbookRoot,
+    });
   }
   if (command.chapter && command.section && command.single) {
     return loader.loadChapter().assertSection(command.section);
