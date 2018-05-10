@@ -16,19 +16,18 @@ class DirectoryPathImpl implements DirectoryPath {
   }
 }
 
-export function confirm(filePath: string): Promise<DirectoryPath> {
-  const absolute = path.resolve(filePath);
+function access(absolute: string, relative: string): Promise<DirectoryPath> {
   return promisify(fs.access)(absolute).then(
-    () => new DirectoryPathImpl(absolute, filePath),
+    () => new DirectoryPathImpl(absolute, relative),
   );
 }
 
-export function fromRelative(
-  root: string,
-  filePath: string,
-): Promise<DirectoryPath> {
-  const absolute = path.resolve(root, filePath);
-  return promisify(fs.access)(absolute).then(
-    () => new DirectoryPathImpl(absolute, filePath),
-  );
-}
+export const confirm = (filePath: string) => {
+  const absolute = path.resolve(filePath);
+  return access(absolute, filePath);
+};
+
+export const confirmFrom = (base: string, filePath: string) => {
+  const absolute = path.resolve(base, filePath);
+  return access(absolute, filePath);
+};
