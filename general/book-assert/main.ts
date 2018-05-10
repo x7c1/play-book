@@ -1,7 +1,7 @@
 import * as path from "path";
+import { BookLoader } from "./BookLoader";
 import { Chapter } from "./Chapter";
 import { createCommand } from "./command";
-import { Book } from "./Book";
 import { serve } from "./serve";
 
 export interface Settings {
@@ -16,11 +16,11 @@ const parse = (settings: Settings) => {
   const { scriptsDir, docsDir, load } = settings;
   const command = createCommand(settings.argv);
   return {
+    getLoader(): Promise<BookLoader> {
+      const file = path.resolve(scriptsDir, docsDir);
+      return load(file).default.runAt(docsDir);
+    },
     loader: {
-      loadBook(): Promise<Book> {
-        const file = path.resolve(scriptsDir, docsDir);
-        return load(file).default.runAt(docsDir);
-      },
       loadChapter() {
         const file = path.resolve(scriptsDir, docsDir, command.chapter);
         return load(file).chapter as Chapter;
@@ -31,10 +31,10 @@ const parse = (settings: Settings) => {
 };
 
 async function promiseOf(settings: Settings): Promise<void> {
-  const { command, loader } = parse(settings);
+  const { command, loader, getLoader } = parse(settings);
   if (command.serve) {
-    const book = await loader.loadBook();
-    return serve(book)({
+    const loader = await getLoader();
+    return serve(loader)({
       src: settings.docsDir,
       dst: settings.gitbookRoot,
     });

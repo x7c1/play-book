@@ -22,3 +22,13 @@ export function confirm(filePath: string): Promise<DirectoryPath> {
     () => new DirectoryPathImpl(absolute, filePath),
   );
 }
+
+export function fromRelative(
+  root: string,
+  filePath: string,
+): Promise<DirectoryPath> {
+  const absolute = path.resolve(root, filePath);
+  return promisify(fs.access)(absolute).then(
+    () => new DirectoryPathImpl(absolute, filePath),
+  );
+}

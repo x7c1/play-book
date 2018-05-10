@@ -1,10 +1,10 @@
 import { watch } from "chokidar";
-import { Book } from "./Book";
+import { BookLoader } from "./BookLoader";
 import { SummaryGenerator } from "./summary/SummaryGenerator";
 import { confirm, DirectoryPath } from "./DirectoryPath";
 
 class Observer {
-  constructor(private book: Book) {}
+  constructor(private loader: BookLoader) {}
   serve(args: { src: DirectoryPath; dst: DirectoryPath }): Promise<void> {
     return new Promise((resolve, reject) => {
       const watcher = watch(args.src.toAbsolute + "/**/*.md");
@@ -26,10 +26,10 @@ class Observer {
   }
 }
 
-export const serve = (book: Book) =>
+export const serve = (loader: BookLoader) =>
   async function(args: { src: string; dst: string }): Promise<void> {
     const src = await confirm(args.src);
     const dst = await confirm(args.dst);
-    await SummaryGenerator.fromBook(book).generateTo(dst);
-    return new Observer(book).serve({ src, dst });
+    await SummaryGenerator.fromLoader(loader).generateTo(dst);
+    return new Observer(loader).serve({ src, dst });
   };
