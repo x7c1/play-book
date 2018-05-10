@@ -1,6 +1,6 @@
 import { confirm, DirectoryPath } from "../DirectoryPath";
 import * as path from "path";
-import { Book } from "book-assert";
+import { BookIndex } from "book-assert";
 
 class Indexer {
   constructor(

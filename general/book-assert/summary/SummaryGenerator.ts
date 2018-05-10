@@ -9,13 +9,11 @@ export class SummaryGenerator {
     return new SummaryGenerator(book);
   }
 
-  generateTo(dir: DirectoryPath): Promise<void> {
-    const summary = createSummary(this.book);
+  async generateTo(dir: DirectoryPath): Promise<void> {
+    const summary = await createSummary(this.book);
     const summaryPath = dir.resolve("SUMMARY2.md");
 
     // todo: dump summary to summaryPath as a Markdown
     console.log(summary, summaryPath);
-
-    return Promise.resolve();
   }
 }

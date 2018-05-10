@@ -1,5 +1,3 @@
-import { Book } from "../Book";
-
 export interface ReadmeHeading {
   title: string;
   path: string;
@@ -20,10 +18,3 @@ export interface Summary {
   readme: ReadmeHeading;
   chapters: ChapterHeading[];
 }
-
-export const createSummary = function(book: Book): Summary {
-  return {
-    readme: book.readme,
-    chapters: [],
-  };
-};

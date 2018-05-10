@@ -3,7 +3,7 @@ export interface Readme {
   path: string;
 }
 
-export class Book {
+export class BookIndex {
   constructor(private readmePath: string) {}
 
   get readme(): Readme {
