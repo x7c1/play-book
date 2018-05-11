@@ -1,15 +1,13 @@
-import * as path from "path";
-import { FilePath } from "./FilePath";
 import { Confirm } from "./Confirm";
+import { HasAbsolutePath, PathResolver } from "./HasAbsolutePath";
+import { PathBase } from "./PathBase";
 
-export interface DirectoryPath extends FilePath {}
-
-class DirectoryPathImpl implements DirectoryPath {
-  constructor(readonly toAbsolute: string, readonly toRelative: string) {}
-
-  resolve(...segments: string[]): string {
-    return path.resolve(this.toAbsolute, ...segments);
-  }
+export interface DirectoryPath extends HasAbsolutePath {
+  toRelative: string;
+  resolve(...segments: string[]): string;
 }
+
+class DirectoryPathImpl extends PathResolver(PathBase)
+  implements DirectoryPath {}
 
 export const confirm: Confirm<DirectoryPath> = Confirm(DirectoryPathImpl);
