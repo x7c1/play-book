@@ -1,7 +1,7 @@
 import { BookLoader } from "../BookLoader";
 import { DirectoryPath } from "../../file-paths/DirectoryPath";
 
-export class SummaryGenerator {
+export class SummaryWriter {
   constructor(private loader: BookLoader) {}
 
   async generateTo(dir: DirectoryPath): Promise<void> {

@@ -10,7 +10,6 @@ export class BookLoader {
   ) {}
 
   async loadSummary(): Promise<Summary> {
-    console.log("loadSummary", this.readmePath, this.chapterPaths);
     return {
       readme: await this.loadReadme(),
       chapters: await this.loadChapters(),
@@ -18,6 +17,8 @@ export class BookLoader {
   }
 
   private async loadReadme(): Promise<ReadmeHeading> {
+    console.log("loadReadme", this.readmePath);
+
     return {
       title: "readme title",
       path: this.readmePath.toRelative,
@@ -25,6 +26,7 @@ export class BookLoader {
   }
 
   private async loadChapters(): Promise<ChapterHeading[]> {
+    console.log("loadChapters", this.chapterPaths);
     // todo: load chapters
     return [];
   }
