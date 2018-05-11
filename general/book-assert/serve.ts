@@ -1,7 +1,7 @@
 import { watch } from "chokidar";
 import { BookLoader } from "./BookLoader";
 import { SummaryGenerator } from "./summary/SummaryGenerator";
-import { confirm, DirectoryPath } from "./DirectoryPath";
+import { confirm, DirectoryPath } from "../file-paths/DirectoryPath";
 
 class Observer {
   constructor(private loader: BookLoader) {}
@@ -28,8 +28,8 @@ class Observer {
 
 export const serve = (loader: BookLoader) =>
   async function(args: { src: string; dst: string }): Promise<void> {
-    const src = await confirm(args.src);
-    const dst = await confirm(args.dst);
-    await SummaryGenerator.fromLoader(loader).generateTo(dst);
+    const src = await confirm.fromCurrent(args.src);
+    const dst = await confirm.fromCurrent(args.dst);
+    await new SummaryGenerator(loader).generateTo(dst);
     return new Observer(loader).serve({ src, dst });
   };

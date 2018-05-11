@@ -1,12 +1,8 @@
 import { BookLoader } from "../BookLoader";
-import { DirectoryPath } from "../DirectoryPath";
+import { DirectoryPath } from "../../file-paths/DirectoryPath";
 
 export class SummaryGenerator {
   constructor(private loader: BookLoader) {}
-
-  static fromLoader(book: BookLoader): SummaryGenerator {
-    return new SummaryGenerator(book);
-  }
 
   async generateTo(dir: DirectoryPath): Promise<void> {
     const summary = await this.loader.loadSummary();

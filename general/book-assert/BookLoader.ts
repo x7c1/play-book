@@ -1,10 +1,5 @@
-import { Summary } from "./summary";
-import { DirectoryPath } from "./DirectoryPath";
-
-export interface Readme {
-  title: string;
-  path: string;
-}
+import { ChapterHeading, ReadmeHeading, Summary } from "./summary";
+import { DirectoryPath } from "../file-paths/DirectoryPath";
 
 export class BookLoader {
   constructor(
@@ -13,21 +8,23 @@ export class BookLoader {
     private chapterPaths: DirectoryPath[],
   ) {}
 
-  get readme(): Readme {
+  async loadSummary(): Promise<Summary> {
+    console.log("loadSummary", this.chapterPaths);
+    return {
+      readme: await this.loadReadme(),
+      chapters: await this.loadChapters(),
+    };
+  }
+
+  private async loadReadme(): Promise<ReadmeHeading> {
     return {
       title: "readme title",
       path: this.readmePath,
     };
   }
 
-  loadSummary(): Promise<Summary> {
-    console.log("loadSummary", this.chapterPaths);
-
-    return Promise.resolve({
-      readme: this.readme,
-
-      // todo: load chapters
-      chapters: [],
-    });
+  private async loadChapters(): Promise<ChapterHeading[]> {
+    // todo: load chapters
+    return [];
   }
 }
