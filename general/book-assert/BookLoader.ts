@@ -10,7 +10,7 @@ export class BookLoader {
   ) {}
 
   async loadSummary(): Promise<Summary> {
-    console.log("loadSummary", this.chapterPaths);
+    console.log("loadSummary", this.readmePath, this.chapterPaths);
     return {
       readme: await this.loadReadme(),
       chapters: await this.loadChapters(),
