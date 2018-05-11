@@ -1,10 +1,11 @@
 import { ChapterHeading, ReadmeHeading, Summary } from "./summary";
 import { DirectoryPath } from "../file-paths/DirectoryPath";
+import { FilePath } from "../file-paths/FilePath";
 
 export class BookLoader {
   constructor(
     private root: string,
-    private readmePath: string,
+    private readmePath: FilePath,
     private chapterPaths: DirectoryPath[],
   ) {}
 
@@ -19,7 +20,7 @@ export class BookLoader {
   private async loadReadme(): Promise<ReadmeHeading> {
     return {
       title: "readme title",
-      path: this.readmePath,
+      path: this.readmePath.toRelative,
     };
   }
 

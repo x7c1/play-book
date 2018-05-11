@@ -1,5 +1,6 @@
 import { BookLoader } from "book-assert";
 import { confirm, DirectoryPath } from "../../file-paths/DirectoryPath";
+import { confirm as confirmFile } from "../../file-paths/FilePath";
 
 class Indexer {
   constructor(private readmePath: string, private chapterDirs: string[]) {}
@@ -10,11 +11,12 @@ class Indexer {
   }
 
   async runAt(root: string): Promise<BookLoader> {
-    const paths = await this.chapterDirs.reduce(
+    const chapters = await this.chapterDirs.reduce(
       async (acc, _) => (await acc).concat(await confirm.fromRelative(root, _)),
       Promise.resolve([] as DirectoryPath[]),
     );
-    return new BookLoader(root, this.readmePath, paths);
+    const readme = await confirmFile.fromRelative(root, this.readmePath);
+    return new BookLoader(root, readme, chapters);
   }
 }
 
