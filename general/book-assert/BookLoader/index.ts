@@ -60,24 +60,23 @@ async function loadChapter(
   const fromHtml = (html: string) => {
     const $ = cheerio.load(html);
     const h1 = $("h1").text();
+    const sections = $("h2")
+      .contents()
+      .toArray()
+      .map((element, sectionIndex) => {
+        return {
+          title: element.nodeValue,
+          path: `${index.toRelative}#${toAnchor(element.nodeValue)}`,
+        };
+      });
+
     return {
       title: h1,
       path: index.toRelative,
-      sections: [],
+      sections,
     };
   };
   return promisify(readFile)(index.toAbsolute, "utf-8")
     .then(fromMarkdown)
     .then(fromHtml);
 }
-
-const sampleSection = {
-  title: "section title",
-  path: "./section",
-};
-
-const sampleChapter = {
-  title: "chapter-title",
-  path: "./chapter",
-  sections: [sampleSection],
-};
