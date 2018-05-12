@@ -21,23 +21,42 @@ export class BookLoader {
   }
 
   private async loadReadme(): Promise<ReadmeHeading> {
-    console.log("loadReadme", this.readmePath);
-
-    return {
-      title: "readme title",
-      path: this.readmePath.toRelative,
-    };
+    return loadReadme(this.readmePath);
   }
 
   private async loadChapters(): Promise<ChapterHeading[]> {
-    console.log("loadChapters", this.chapterPaths);
+    console.log("loadChapters", this.root, this.chapterPaths);
     return Promise.all(this.chapterPaths.map(loadChapter));
   }
 }
 
-async function loadChapter(path: DirectoryPath): Promise<ChapterHeading> {
-  const index = await path.withParent.confirmFile("index.md");
-  const fromMarkdown = (markdown: string) => md().render(markdown);
+const fromMarkdown = (markdown: string) => md().render(markdown);
+
+function loadReadme(path: FilePath): Promise<ReadmeHeading> {
+  const fromHtml = (html: string) => {
+    const $ = cheerio.load(html);
+    return {
+      title: $("h1").text(),
+      path: path.toRelative,
+    };
+  };
+  return promisify(readFile)(path.toAbsolute, "utf-8")
+    .then(fromMarkdown)
+    .then(fromHtml);
+}
+
+function toAnchor(text: string): string {
+  return text
+    .replace(":", "")
+    .replace(/[ ]/g, "-")
+    .toLowerCase();
+}
+
+async function loadChapter(
+  chapterPath: DirectoryPath,
+  chapterIndex: number,
+): Promise<ChapterHeading> {
+  const index = await chapterPath.withParent.confirmFile("index.md");
   const fromHtml = (html: string) => {
     const $ = cheerio.load(html);
     const h1 = $("h1").text();

@@ -10,14 +10,9 @@ export class SummaryWriter {
   async generateTo(dir: DirectoryPath): Promise<void> {
     const summary = await this.loader.loadSummary();
     const summaryPath = dir.resolve("SUMMARY.md");
+    const content = new Formatter(summary).format();
 
-    const formatter = new Formatter(summary);
-    const content = formatter.format();
-
-    // todo: dump summary to summaryPath as a Markdown
-    console.log("generateTo", summary, summaryPath);
-    console.log(content);
-
+    console.log("SummaryWriter#generateTo", summaryPath, summary, content);
     return promisify(writeFile)(summaryPath, content);
   }
 }
