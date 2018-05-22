@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "gitbook": "gitbook serve ./book-assert.docs",
+    "gitbook:serve": "gitbook serve ./book-assert.docs",
     "build:ts": "$(npm bin)/tsc --project .",
     "serve": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js --serve",
     "test": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js"
