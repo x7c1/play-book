@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "gitbook:serve": "gitbook serve ./book-assert.docs",
+    "gitbook:install": "gitbook install ./book-assert.docs",
     "build:ts": "$(npm bin)/tsc --project .",
     "serve": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js --serve",
     "test": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js"
