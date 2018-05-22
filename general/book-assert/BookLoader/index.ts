@@ -5,6 +5,7 @@ import { promisify } from "util";
 import { readFile } from "fs";
 import * as md from "markdown-it";
 import * as cheerio from "cheerio";
+import { BookChapters, ChapterContent } from "../BookChapter";
 
 export class BookLoader {
   constructor(
@@ -15,16 +16,21 @@ export class BookLoader {
 
   async loadSummary(): Promise<Summary> {
     return {
-      readme: await this.loadReadme(),
-      chapters: await this.loadChapters(),
+      readme: await this.loadReadmeHeading(),
+      chapters: await this.loadChapterHeadings(),
     };
   }
 
-  private async loadReadme(): Promise<ReadmeHeading> {
+  async loadBookChapters(): Promise<BookChapters> {
+    const promises = this.chapterPaths.map(loadChapterContent);
+    return Promise.all(promises).then(contents => ({ contents }));
+  }
+
+  private async loadReadmeHeading(): Promise<ReadmeHeading> {
     return loadReadme(this.readmePath);
   }
 
-  private async loadChapters(): Promise<ChapterHeading[]> {
+  private async loadChapterHeadings(): Promise<ChapterHeading[]> {
     console.log("loadChapters", this.root, this.chapterPaths);
     return Promise.all(this.chapterPaths.map(loadChapter));
   }
@@ -50,6 +56,20 @@ function toAnchor(text: string): string {
     .replace(/[.:]/g, "")
     .replace(/[ ]/g, "-")
     .toLowerCase();
+}
+
+async function loadChapterContent(
+  chapterPath: DirectoryPath,
+): Promise<ChapterContent> {
+  const filePath = await chapterPath.withParent.confirmFile("index.md");
+  const markdownString = await promisify(readFile)(
+    filePath.toAbsolute,
+    "utf-8",
+  );
+  return {
+    filePath,
+    markdownString,
+  };
 }
 
 async function loadChapter(

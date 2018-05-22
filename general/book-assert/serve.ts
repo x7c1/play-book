@@ -2,6 +2,7 @@ import { watch } from "chokidar";
 import { BookLoader } from "./BookLoader";
 import { SummaryWriter } from "./summary/SummaryWriter";
 import { confirm, DirectoryPath } from "../file-paths/DirectoryPath";
+import { ChapterWriter } from "./BookChapter/ChapterWriter";
 
 class Observer {
   constructor(private loader: BookLoader) {}
@@ -31,5 +32,6 @@ export const serve = (loader: BookLoader) =>
     const src = await confirm.fromCurrent(args.src);
     const dst = await confirm.fromCurrent(args.dst);
     await new SummaryWriter(loader).generateTo(dst);
+    await new ChapterWriter(loader).generateTo(dst);
     return new Observer(loader).serve({ src, dst });
   };
