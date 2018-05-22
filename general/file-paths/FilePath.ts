@@ -1,9 +1,9 @@
 import { Confirm } from "./Confirm";
 import { HasAbsolutePath, PathResolver } from "./HasAbsolutePath";
 import { PathBase } from "./PathBase";
+import { HasRelativePath } from "./HasRelativePath";
 
-export interface FilePath extends HasAbsolutePath {
-  toRelative: string;
+export interface FilePath extends HasAbsolutePath, HasRelativePath {
   resolve(...segments: string[]): string;
 }
 

@@ -3,9 +3,9 @@ import { HasAbsolutePath, PathResolver } from "./HasAbsolutePath";
 import { PathBase } from "./PathBase";
 import { confirm as confirmFile, FilePath } from "./FilePath";
 import { basename, dirname, join } from "path";
+import { HasRelativePath } from "./HasRelativePath";
 
-export interface DirectoryPath extends HasAbsolutePath {
-  toRelative: string;
+export interface DirectoryPath extends HasAbsolutePath, HasRelativePath {
   withParent: WithParent;
   resolve(...segments: string[]): string;
 }
