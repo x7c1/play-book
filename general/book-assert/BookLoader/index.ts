@@ -47,7 +47,7 @@ function loadReadme(path: FilePath): Promise<ReadmeHeading> {
 
 function toAnchor(text: string): string {
   return text
-    .replace(":", "")
+    .replace(/[.:]/g, "")
     .replace(/[ ]/g, "-")
     .toLowerCase();
 }
