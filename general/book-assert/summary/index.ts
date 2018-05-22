@@ -3,15 +3,9 @@ export interface ReadmeHeading {
   path: string;
 }
 
-export interface SectionHeading {
-  title: string;
-  path: string;
-}
-
 export interface ChapterHeading {
   title: string;
   path: string;
-  sections: SectionHeading[];
 }
 
 export interface Summary {
