@@ -16,7 +16,7 @@ const parse = (settings: Settings) => {
   const { scriptsDir, docsDir, load } = settings;
   const command = createCommand(settings.argv);
   return {
-    getLoader(): Promise<BookLoader> {
+    createLoader(): Promise<BookLoader> {
       const file = path.resolve(scriptsDir, docsDir);
       return load(file).default.runAt(docsDir);
     },
@@ -31,10 +31,9 @@ const parse = (settings: Settings) => {
 };
 
 async function promiseOf(settings: Settings): Promise<void> {
-  const { command, loader, getLoader } = parse(settings);
+  const { command, loader, createLoader } = parse(settings);
   if (command.serve) {
-    const loader = await getLoader();
-    return serve(loader)({
+    return serve(createLoader)({
       src: settings.docsDir,
       dst: settings.gitbookRoot,
     });
