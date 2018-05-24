@@ -20,18 +20,20 @@ const parse = (settings: Settings) => {
       const file = path.resolve(scriptsDir, docsDir);
       return load(file).default.runAt(docsDir);
     },
-    loader: {
-      loadChapter() {
-        const file = path.resolve(scriptsDir, docsDir, command.chapter);
-        return load(file).chapter as Chapter;
-      },
+    async loadChapter(): Promise<Chapter> {
+      const file = path.resolve(scriptsDir, docsDir);
+      const chapterPath = await load(file).default.loadChapterPath(
+        docsDir,
+        command.chapter,
+      );
+      return load(chapterPath.toRelative).chapter as Chapter;
     },
     command,
   };
 };
 
 async function promiseOf(settings: Settings): Promise<void> {
-  const { command, loader, createLoader } = parse(settings);
+  const { command, loadChapter, createLoader } = parse(settings);
   if (command.serve) {
     return serve(createLoader)({
       src: settings.docsDir,
@@ -39,10 +41,10 @@ async function promiseOf(settings: Settings): Promise<void> {
     });
   }
   if (command.chapter && command.section && command.single) {
-    return loader.loadChapter().assertSection(command.section);
+    return (await loadChapter()).assertSection(command.section);
   }
   if (command.chapter && command.single) {
-    return loader.loadChapter().assertSections();
+    return (await loadChapter()).assertSections();
   }
   throw new Error("not implemented");
 }

@@ -1,6 +1,7 @@
 import { BookLoader } from "book-assert";
 import { confirm, DirectoryPath } from "../../file-paths/DirectoryPath";
 import { confirm as confirmFile } from "../../file-paths/FilePath";
+import * as path from "path";
 
 class Indexer {
   constructor(private readmePath: string, private chapterDirs: string[]) {}
@@ -17,6 +18,11 @@ class Indexer {
     );
     const readme = await confirmFile.fromRelative(root, this.readmePath);
     return new BookLoader(root, readme, chapters);
+  }
+
+  loadChapterPath(root: string, chapterNumber: number): Promise<DirectoryPath> {
+    const filePath = path.join(root, this.chapterDirs[chapterNumber - 1]);
+    return confirm.fromCurrent("./" + filePath);
   }
 }
 

@@ -16,7 +16,7 @@ export class SectionBinder {
 }
 
 const here = (dirname: string) => {
-  const matches = dirname.match(/([^/]+\/\d+)$/);
+  const matches = dirname.match(/([^/]+\/[^/]+)$/);
   if (matches === null) {
     throw new Error(`invalid file location: ${dirname}`);
   }
