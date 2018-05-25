@@ -24,7 +24,10 @@ const here = (dirname: string) => {
 };
 
 export class Chapter {
-  constructor(private sections: Section[] = []) {}
+  constructor(
+    private sections: Section[] = [],
+    public readonly nextPages: string[] = [],
+  ) {}
 
   static fromHere(dirname: string) {
     return {
@@ -37,6 +40,10 @@ export class Chapter {
     return new SectionBinder(sectionTitle, traverser =>
       this.sections.push(traverser),
     );
+  }
+
+  nextPage(pageFile: string) {
+    this.nextPages.push(pageFile);
   }
 
   assertSections(): Promise<void> {

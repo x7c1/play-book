@@ -31,7 +31,10 @@ class Formatter {
 
   get chapters(): string[] {
     const toString = (chapter: ChapterHeading) => {
-      return [li(link(chapter.title, chapter.path))].join("\n");
+      const pages = chapter.nextPages.map(page =>
+        li(link(page.title, page.path), "  "),
+      );
+      return [li(link(chapter.title, chapter.path))].concat(pages).join("\n");
     };
     return this.summary.chapters.map(toString);
   }

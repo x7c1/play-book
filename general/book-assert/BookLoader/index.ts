@@ -34,8 +34,52 @@ export class BookLoader {
 
   private async loadChapterHeadings(): Promise<ChapterHeading[]> {
     console.log("loadChapters", this.root, this.chapterPaths);
-    return Promise.all(this.chapterPaths.map(loadChapterHeading));
+    return Promise.all(this.chapterPaths.map(this.loadChapterHeading));
   }
+
+  private async loadNextPages(
+    chapterPath: DirectoryPath,
+    chapterNumber: number,
+  ): Promise<PageHeading[]> {
+    const chapter = await this.loadChapter(chapterNumber);
+    if (!chapter) {
+      return Promise.resolve([]);
+    }
+    const promises = chapter.nextPages.map(async name => {
+      const filePath = await chapterPath.withParent.confirmFile(name);
+      const fromHtml = (html: string) => {
+        const $ = cheerio.load(html);
+        return {
+          title: $("h1").text(),
+          path: filePath.toRelative,
+        };
+      };
+      return promisify(readFile)(filePath.toAbsolute, "utf-8")
+        .then(fromMarkdown)
+        .then(fromHtml);
+    });
+    return Promise.all(promises);
+  }
+
+  private loadChapterHeading = async (
+    chapterPath: DirectoryPath,
+    chapterIndex: number,
+  ) => {
+    const index = await chapterPath.withParent.confirmFile("index.md");
+    const nextPages = await this.loadNextPages(chapterPath, chapterIndex + 1);
+    const fromHtml = (html: string) => {
+      const $ = cheerio.load(html);
+      const h1 = $("h1").text();
+      return {
+        title: `${chapterIndex + 1}. ${h1}`,
+        path: index.toRelative,
+        nextPages,
+      };
+    };
+    return promisify(readFile)(index.toAbsolute, "utf-8")
+      .then(fromMarkdown)
+      .then(fromHtml);
+  };
 }
 
 const fromMarkdown = (markdown: string) => md().render(markdown);
@@ -68,35 +112,3 @@ const warning = `
 
 {% endif %}
 `;
-
-async function loadChapterContent(
-  chapterPath: DirectoryPath,
-): Promise<ChapterContent> {
-  const filePath = await chapterPath.withParent.confirmFile("index.md");
-  const markdownString = await promisify(readFile)(
-    filePath.toAbsolute,
-    "utf-8",
-  );
-  return {
-    filePath,
-    markdownString: warning + "\n" + markdownString,
-  };
-}
-
-async function loadChapterHeading(
-  chapterPath: DirectoryPath,
-  chapterIndex: number,
-): Promise<ChapterHeading> {
-  const index = await chapterPath.withParent.confirmFile("index.md");
-  const fromHtml = (html: string) => {
-    const $ = cheerio.load(html);
-    const h1 = $("h1").text();
-    return {
-      title: `${chapterIndex + 1}. ${h1}`,
-      path: index.toRelative,
-    };
-  };
-  return promisify(readFile)(index.toAbsolute, "utf-8")
-    .then(fromMarkdown)
-    .then(fromHtml);
-}

@@ -48,7 +48,7 @@ async function promiseOf(settings: Settings): Promise<void> {
   if (command.chapter && command.single) {
     return (await loadChapter()).assertSections();
   }
-  throw new Error("not implemented");
+  throw new Error("invalid pattern");
 }
 
 export const main = (settings: Settings) => {
