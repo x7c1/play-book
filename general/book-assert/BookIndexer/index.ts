@@ -3,7 +3,7 @@ import { confirm, DirectoryPath } from "../../file-paths/DirectoryPath";
 import { confirm as confirmFile } from "../../file-paths/FilePath";
 import * as path from "path";
 
-export type ChapterLoader = (chapterNumber: number) => Promise<Chapter>;
+export type ChapterLoader = (chapterNumber: number) => Promise<Chapter | null>;
 
 class Indexer {
   constructor(private readmePath: string, private chapterDirs: string[]) {}

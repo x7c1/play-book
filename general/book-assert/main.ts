@@ -21,14 +21,26 @@ const parse = (settings: Settings) => {
       docsDir,
       chapterNumber,
     );
-    return load(chapterPath.toRelative).chapter as Chapter;
+    try {
+      const module = load(chapterPath.toRelative);
+      return (module.chapter as Chapter) || null;
+    } catch (e) {
+      if (e.code !== "MODULE_NOT_FOUND") {
+        throw e;
+      }
+      return null;
+    }
   };
   return {
     createLoader(): Promise<BookLoader> {
       return load(file).default.buildLoader(docsDir, loadChapter);
     },
-    loadChapter(): Promise<Chapter> {
-      return loadChapter(command.chapter);
+    async loadChapter(): Promise<Chapter> {
+      const chapter = await loadChapter(command.chapter);
+      if (chapter) {
+        return chapter;
+      }
+      throw new Error(`no assertions for chapter:${command.chapter}`);
     },
     command,
   };
