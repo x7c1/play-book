@@ -15,25 +15,27 @@ export interface Settings {
 const parse = (settings: Settings) => {
   const { scriptsDir, docsDir, load } = settings;
   const command = createCommand(settings.argv);
+  const file = path.resolve(scriptsDir, docsDir);
+  const loadChapter = async (chapterNumber: number) => {
+    const chapterPath = await load(file).default.loadChapterPath(
+      docsDir,
+      chapterNumber,
+    );
+    return load(chapterPath.toRelative).chapter as Chapter;
+  };
   return {
     createLoader(): Promise<BookLoader> {
-      const file = path.resolve(scriptsDir, docsDir);
-      return load(file).default.runAt(docsDir);
+      return load(file).default.buildLoader(docsDir, loadChapter);
     },
-    async loadChapter(): Promise<Chapter> {
-      const file = path.resolve(scriptsDir, docsDir);
-      const chapterPath = await load(file).default.loadChapterPath(
-        docsDir,
-        command.chapter,
-      );
-      return load(chapterPath.toRelative).chapter as Chapter;
+    loadChapter(): Promise<Chapter> {
+      return loadChapter(command.chapter);
     },
     command,
   };
 };
 
 async function promiseOf(settings: Settings): Promise<void> {
-  const { command, loadChapter, createLoader } = parse(settings);
+  const { command, createLoader, loadChapter } = parse(settings);
   if (command.serve) {
     return serve(createLoader)({
       src: settings.docsDir,

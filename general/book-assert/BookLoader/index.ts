@@ -6,10 +6,12 @@ import { readFile } from "fs";
 import * as md from "markdown-it";
 import * as cheerio from "cheerio";
 import { BookChapters, ChapterContent } from "../BookChapter";
+import { ChapterLoader } from "../BookIndexer";
 
 export class BookLoader {
   constructor(
     private root: string,
+    private loadChapter: ChapterLoader,
     private readmePath: FilePath,
     private chapterPaths: DirectoryPath[],
   ) {}
@@ -32,7 +34,7 @@ export class BookLoader {
 
   private async loadChapterHeadings(): Promise<ChapterHeading[]> {
     console.log("loadChapters", this.root, this.chapterPaths);
-    return Promise.all(this.chapterPaths.map(loadChapter));
+    return Promise.all(this.chapterPaths.map(loadChapterHeading));
   }
 }
 
@@ -81,7 +83,7 @@ async function loadChapterContent(
   };
 }
 
-async function loadChapter(
+async function loadChapterHeading(
   chapterPath: DirectoryPath,
   chapterIndex: number,
 ): Promise<ChapterHeading> {
