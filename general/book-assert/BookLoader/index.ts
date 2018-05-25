@@ -1,4 +1,9 @@
-import { ChapterHeading, ReadmeHeading, Summary } from "../summary";
+import {
+  ChapterHeading,
+  PageHeading,
+  ReadmeHeading,
+  Summary,
+} from "../summary";
 import { DirectoryPath } from "../../file-paths/DirectoryPath";
 import { FilePath } from "../../file-paths/FilePath";
 import { promisify } from "util";
@@ -7,6 +12,7 @@ import * as md from "markdown-it";
 import * as cheerio from "cheerio";
 import { BookChapters, ChapterContent } from "../BookChapter";
 import { ChapterLoader } from "../BookIndexer";
+import { basename } from "path";
 
 export class BookLoader {
   constructor(
@@ -24,8 +30,34 @@ export class BookLoader {
   }
 
   async loadBookChapters(): Promise<BookChapters> {
-    const promises = this.chapterPaths.map(loadChapterContent);
-    return Promise.all(promises).then(contents => ({ contents }));
+    const promises = this.chapterPaths.map((path, i) =>
+      this.loadChapterContent(path, i),
+    );
+    const contents = await promises.reduce(async (x1, x2) => {
+      return (await x1).concat(await x2);
+    });
+    return { contents };
+  }
+
+  private async loadChapterContent(
+    chapterPath: DirectoryPath,
+    chapterIndex: number,
+  ): Promise<ChapterContent[]> {
+    const f = async (name: string) => {
+      const filePath = await chapterPath.withParent.confirmFile(name);
+      const markdownString = await promisify(readFile)(
+        filePath.toAbsolute,
+        "utf-8",
+      );
+      return {
+        filePath,
+        markdownString: warning + "\n" + markdownString,
+      };
+    };
+    const nextPages = await this.loadNextPages(chapterPath, chapterIndex + 1);
+    return Promise.all(
+      [f("index.md")].concat(nextPages.map(page => f(basename(page.path)))),
+    );
   }
 
   private async loadReadmeHeading(): Promise<ReadmeHeading> {
