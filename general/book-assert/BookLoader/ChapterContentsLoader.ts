@@ -7,6 +7,7 @@ import { basename } from "path";
 import { ChapterHeading, PageHeading } from "../summary";
 import * as cheerio from "cheerio";
 import * as md from "markdown-it";
+import { FilePath } from "../../file-paths/FilePath";
 
 const warning = `
 {% if false %}
@@ -18,6 +19,10 @@ const warning = `
 `;
 
 const fromMarkdown = (markdown: string) => md().render(markdown);
+
+const toCheerio = (html: string) => cheerio.load(html);
+
+type Parser<A> = (path: FilePath) => ($: CheerioStatic) => A;
 
 export class ChapterContentsLoader {
   constructor(
@@ -32,58 +37,70 @@ export class ChapterContentsLoader {
   ) => new ChapterContentsLoader(loadChapter, chapterPath, chapterIndex);
 
   async loadContents(): Promise<ChapterContent[]> {
-    const f = async (name: string) => {
-      const filePath = await this.chapterPath.withParent.confirmFile(name);
-      const markdownString = await promisify(readFile)(
-        filePath.toAbsolute,
-        "utf-8",
-      );
-      return {
-        filePath,
-        markdownString: warning + "\n" + markdownString,
-      };
-    };
-    const nextPages = await this.loadNextPages();
-    return Promise.all(
-      [f("index.md")].concat(nextPages.map(page => f(basename(page.path)))),
-    );
+    const fileNames: string[] = (await this.loadNextPages())
+      .map(_ => _.path)
+      .map(_ => basename(_));
+
+    const contents = ["index.md"]
+      .concat(fileNames)
+      .map(this.confirmFile)
+      .map(_ => _.then(this.toChapterContent));
+
+    return Promise.all(contents);
   }
 
   async loadChapterHeading(): Promise<ChapterHeading> {
-    const index = await this.chapterPath.withParent.confirmFile("index.md");
-    const nextPages = await this.loadNextPages();
-    const fromHtml = (html: string) => {
-      const $ = cheerio.load(html);
-      const h1 = $("h1").text();
+    const parse: Parser<Promise<ChapterHeading>> = index => async $ => {
       return {
-        title: `${this.chapterIndex + 1}. ${h1}`,
+        title: `${this.chapterNumber}. ${$("h1").text()}`,
         path: index.toRelative,
-        nextPages,
+        nextPages: await this.loadNextPages(),
       };
     };
-    return promisify(readFile)(index.toAbsolute, "utf-8")
-      .then(fromMarkdown)
-      .then(fromHtml);
+    return this.load("index.md", parse);
+  }
+
+  private get chapterNumber(): number {
+    return this.chapterIndex + 1;
+  }
+
+  private toChapterContent = (filePath: FilePath) => {
+    return this.readFile(filePath).then(_ => ({
+      filePath,
+      markdownString: warning + "\n" + _,
+    }));
+  };
+
+  private confirmFile = (fileName: string) => {
+    return this.chapterPath.withParent.confirmFile(fileName);
+  };
+
+  private get nextPages(): Promise<string[]> {
+    return this.loadChapter(this.chapterNumber).then(
+      _ => (_ ? _.nextPages : []),
+    );
   }
 
   private async loadNextPages(): Promise<PageHeading[]> {
-    const chapter = await this.loadChapter(this.chapterIndex + 1);
-    if (!chapter) {
-      return Promise.resolve([]);
-    }
-    const promises = chapter.nextPages.map(async name => {
-      const filePath = await this.chapterPath.withParent.confirmFile(name);
-      const fromHtml = (html: string) => {
-        const $ = cheerio.load(html);
-        return {
-          title: $("h1").text(),
-          path: filePath.toRelative,
-        };
+    const parse: Parser<PageHeading> = path => $ => {
+      return {
+        title: $("h1").text(),
+        path: path.toRelative,
       };
-      return promisify(readFile)(filePath.toAbsolute, "utf-8")
-        .then(fromMarkdown)
-        .then(fromHtml);
-    });
-    return Promise.all(promises);
+    };
+    const pages = (await this.nextPages).map(name => this.load(name, parse));
+    return Promise.all(pages);
+  }
+
+  private async load<A>(fileName: string, parse: Parser<A>): Promise<A> {
+    const filePath = await this.confirmFile(fileName);
+    return this.readFile(filePath)
+      .then(fromMarkdown)
+      .then(toCheerio)
+      .then(parse(filePath));
+  }
+
+  private async readFile(file: FilePath) {
+    return promisify(readFile)(file.toAbsolute, "utf-8");
   }
 }

@@ -5,7 +5,7 @@ import { promisify } from "util";
 import { readFile } from "fs";
 import * as md from "markdown-it";
 import * as cheerio from "cheerio";
-import { BookChapters, ChapterContent } from "../BookChapter";
+import { BookChapters} from "../BookChapter";
 import { ChapterLoader } from "../BookIndexer";
 import { ChapterContentsLoader } from "./ChapterContentsLoader";
 
