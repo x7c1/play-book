@@ -41,7 +41,7 @@ export class ChapterContentsLoader {
       .map(_ => _.path)
       .map(_ => basename(_));
 
-    const contents = ["index.md"]
+    const contents = [this.defaultPage]
       .concat(fileNames)
       .map(this.confirmFile)
       .map(_ => _.then(this.toChapterContent));
@@ -57,7 +57,11 @@ export class ChapterContentsLoader {
         nextPages: await this.loadNextPages(),
       };
     };
-    return this.load("index.md", parse);
+    return this.load(this.defaultPage, parse);
+  }
+
+  get defaultPage(): string {
+    return "index.md";
   }
 
   private get chapterNumber(): number {
