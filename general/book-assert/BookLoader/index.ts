@@ -13,7 +13,7 @@ export class BookLoader {
   constructor(
     private root: string,
     private loadChapter: ChapterLoader,
-    private readmePath: FilePath,
+    private readme: ReadmeHeading,
     private chapterPaths: DirectoryPath[],
   ) {}
 
@@ -36,7 +36,8 @@ export class BookLoader {
   }
 
   private async loadReadmeHeading(): Promise<ReadmeHeading> {
-    return loadReadme(this.readmePath);
+    // todo: confirm existence
+    return Promise.resolve(this.readme);
   }
 
   private async loadChapterHeadings(): Promise<ChapterHeading[]> {
