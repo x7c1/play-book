@@ -1,14 +1,11 @@
 import { ChapterHeading, ReadmeHeading, Summary } from "../summary";
 import { DirectoryPath } from "../../file-paths/DirectoryPath";
-import { confirm, FilePath } from "../../file-paths/FilePath";
-import { promisify } from "util";
-import { readFile } from "fs";
-import * as md from "markdown-it";
-import * as cheerio from "cheerio";
+import { confirm} from "../../file-paths/FilePath";
 import { BookChapters } from "../BookChapter";
 import { ChapterLoader } from "../BookIndexer";
 import { ChapterContentsLoader } from "./ChapterContentsLoader";
 import { BookReadme } from "../BookReadme";
+import { ReadmeLoader } from "./ReadmeLoader";
 
 export class BookLoader {
   constructor(
@@ -38,10 +35,7 @@ export class BookLoader {
 
   async loadBookReadme(): Promise<BookReadme> {
     const filePath = await confirm.fromRelative(this.root, this.readme.path);
-    return {
-      markdownString: await promisify(readFile)(filePath.toAbsolute, "utf-8"),
-      filePath,
-    };
+    return new ReadmeLoader(filePath).loadReadme();
   }
 
   private async loadReadmeHeading(): Promise<ReadmeHeading> {
@@ -57,19 +51,4 @@ export class BookLoader {
 
     return Promise.all(promises);
   }
-}
-
-const fromMarkdown = (markdown: string) => md().render(markdown);
-
-function loadReadme(path: FilePath): Promise<ReadmeHeading> {
-  const fromHtml = (html: string) => {
-    const $ = cheerio.load(html);
-    return {
-      title: $("h1").text(),
-      path: path.toRelative,
-    };
-  };
-  return promisify(readFile)(path.toAbsolute, "utf-8")
-    .then(fromMarkdown)
-    .then(fromHtml);
 }
