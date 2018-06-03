@@ -1,8 +1,9 @@
-import { BookReadme } from "../BookReadme";
-import { promisify } from "util";
-import { FilePath } from "../../file-paths/FilePath";
 import { readFile } from "fs";
+import { promisify } from "util";
+import { BookReadme } from "../BookReadme";
+import { FilePath } from "../../file-paths/FilePath";
 import { ReadmeHeading } from "../summary";
+import { warning } from "./warning";
 
 export class ReadmeLoader {
   constructor(private readme: ReadmeHeading) {}
@@ -16,7 +17,7 @@ export class ReadmeLoader {
   }
 
   private loadMarkdownString(): Promise<string> {
-    return this.readFile(this.readme.filePath);
+    return this.readFile(this.readme.filePath).then(_ => warning + "\n" + _);
   }
 
   private async readFile(file: FilePath) {
