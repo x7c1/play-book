@@ -1,6 +1,8 @@
+import { FilePath } from "../../file-paths/FilePath";
+
 export interface ReadmeHeading {
   title: string;
-  path: string;
+  filePath: FilePath;
 }
 
 export interface PageHeading {

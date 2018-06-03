@@ -26,7 +26,9 @@ class Formatter {
   }
 
   get readme(): string {
-    return li(link(this.summary.readme.title, this.summary.readme.path));
+    return li(
+      link(this.summary.readme.title, this.summary.readme.filePath.toRelative),
+    );
   }
 
   get chapters(): string[] {

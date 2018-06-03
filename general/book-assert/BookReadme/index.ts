@@ -1,6 +1,7 @@
-import { HasRelativePath } from "../../file-paths/HasRelativePath";
+import { FilePath } from "../../file-paths/FilePath";
 
 export interface BookReadme {
+  title: string;
   markdownString: string;
-  filePath: HasRelativePath;
+  filePath: FilePath;
 }

@@ -1,6 +1,5 @@
 import { ChapterHeading, ReadmeHeading, Summary } from "../summary";
 import { DirectoryPath } from "../../file-paths/DirectoryPath";
-import { confirm} from "../../file-paths/FilePath";
 import { BookChapters } from "../BookChapter";
 import { ChapterLoader } from "../BookIndexer";
 import { ChapterContentsLoader } from "./ChapterContentsLoader";
@@ -17,7 +16,7 @@ export class BookLoader {
 
   async loadSummary(): Promise<Summary> {
     return {
-      readme: await this.loadReadmeHeading(),
+      readme: await this.loadBookReadme(),
       chapters: await this.loadChapterHeadings(),
     };
   }
@@ -34,13 +33,7 @@ export class BookLoader {
   }
 
   async loadBookReadme(): Promise<BookReadme> {
-    const filePath = await confirm.fromRelative(this.root, this.readme.path);
-    return new ReadmeLoader(filePath).loadReadme();
-  }
-
-  private async loadReadmeHeading(): Promise<ReadmeHeading> {
-    // todo: confirm existence
-    return Promise.resolve(this.readme);
+    return new ReadmeLoader(this.readme).loadReadme();
   }
 
   private async loadChapterHeadings(): Promise<ChapterHeading[]> {

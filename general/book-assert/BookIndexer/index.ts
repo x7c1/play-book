@@ -2,12 +2,16 @@ import { BookLoader, Chapter } from "book-assert";
 import { confirm, DirectoryPath } from "../../file-paths/DirectoryPath";
 import { confirm as confirmFile } from "../../file-paths/FilePath";
 import * as path from "path";
-import { ReadmeHeading } from "../summary";
 
 export type ChapterLoader = (chapterNumber: number) => Promise<Chapter | null>;
 
+export type ReadmeSetting = {
+  title: string;
+  path: string;
+};
+
 class Indexer {
-  constructor(private readme: ReadmeHeading, private chapterDirs: string[]) {}
+  constructor(private readme: ReadmeSetting, private chapterDirs: string[]) {}
 
   chapter(chapterDir: string): Indexer {
     const chapterDirs = this.chapterDirs.concat(chapterDir);
@@ -19,7 +23,11 @@ class Indexer {
       async (acc, _) => (await acc).concat(await confirm.fromRelative(root, _)),
       Promise.resolve([] as DirectoryPath[]),
     );
-    return new BookLoader(root, loader, this.readme, chapters);
+    const readme = {
+      title: this.readme.title,
+      filePath: await confirmFile.fromRelative(root, this.readme.path),
+    };
+    return new BookLoader(root, loader, readme, chapters);
   }
 
   loadChapterPath(root: string, chapterNumber: number): Promise<DirectoryPath> {
@@ -33,7 +41,7 @@ export interface BookIndexer {
 }
 
 export function BookIndexer(args: {
-  readme: ReadmeHeading;
+  readme: ReadmeSetting;
   chapters: string[];
 }): BookIndexer {
   const indexer = new Indexer(args.readme, []);
