@@ -1,6 +1,6 @@
 import { ChapterHeading, ReadmeHeading, Summary } from "../summary";
 import { DirectoryPath } from "../../file-paths/DirectoryPath";
-import { FilePath } from "../../file-paths/FilePath";
+import { confirm, FilePath } from "../../file-paths/FilePath";
 import { promisify } from "util";
 import { readFile } from "fs";
 import * as md from "markdown-it";
@@ -8,6 +8,7 @@ import * as cheerio from "cheerio";
 import { BookChapters } from "../BookChapter";
 import { ChapterLoader } from "../BookIndexer";
 import { ChapterContentsLoader } from "./ChapterContentsLoader";
+import { BookReadme } from "../BookReadme";
 
 export class BookLoader {
   constructor(
@@ -33,6 +34,14 @@ export class BookLoader {
       _.reduce((a, b) => a.concat(b)),
     );
     return { contents };
+  }
+
+  async loadBookReadme(): Promise<BookReadme> {
+    const filePath = await confirm.fromRelative(this.root, this.readme.path);
+    return {
+      markdownString: await promisify(readFile)(filePath.toAbsolute, "utf-8"),
+      filePath,
+    };
   }
 
   private async loadReadmeHeading(): Promise<ReadmeHeading> {

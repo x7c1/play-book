@@ -3,6 +3,7 @@ import { BookLoader } from "../BookLoader/index";
 import { SummaryWriter } from "../summary/SummaryWriter";
 import { confirm, DirectoryPath } from "../../file-paths/DirectoryPath";
 import { ChapterWriter } from "../BookChapter/ChapterWriter";
+import { ReadmeWriter } from "./ReadmeWriter";
 
 class Observer {
   constructor(private createLoader: () => Promise<BookLoader>) {}
@@ -32,9 +33,7 @@ class Observer {
 
   private async reload(args: { src: DirectoryPath; dst: DirectoryPath }) {
     const loader = await this.createLoader();
-
-    // todo: generate readme
-
+    await new ReadmeWriter(loader).generateTo(args.dst);
     await new SummaryWriter(loader).generateTo(args.dst);
     await new ChapterWriter(loader).generateTo(args.dst);
   }
