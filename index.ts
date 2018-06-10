@@ -1,8 +1,9 @@
-import { Chapter, main } from "book-assert";
+import { main } from "book-assert";
 
 main({
-  docs: "./docs",
-  outDir: "./docs-gen",
-  loader: id => require(id).chapter as Chapter,
   argv: process.argv,
+  scriptsDir: "./book-assert.ts.gen",
+  docsDir: "./docs",
+  gitbookRoot: "./book-assert.docs",
+  load: id => require(id),
 });

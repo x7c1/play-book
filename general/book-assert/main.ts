@@ -1,30 +1,70 @@
+import * as path from "path";
+import { BookLoader } from "./BookLoader";
 import { Chapter } from "./Chapter";
 import { createCommand } from "./command";
-import * as path from "path";
+import { serve } from "./serve";
 
-type Settings = {
+export interface Settings {
   argv: string[];
-  outDir: string;
-  docs: string;
-  loader: (id: string) => Chapter;
+  scriptsDir: string;
+  docsDir: string;
+  gitbookRoot: string;
+  load: (id: string) => any;
+}
+
+const parse = (settings: Settings) => {
+  const { scriptsDir, docsDir, load } = settings;
+  const command = createCommand(settings.argv);
+  const file = path.resolve(scriptsDir, docsDir);
+  const loadChapter = async (chapterNumber: number) => {
+    const chapterPath = await load(file).default.loadChapterPath(
+      docsDir,
+      chapterNumber,
+    );
+    try {
+      const module = load(chapterPath.toRelative);
+      return (module.chapter as Chapter) || null;
+    } catch (e) {
+      if (e.code !== "MODULE_NOT_FOUND") {
+        throw e;
+      }
+      return null;
+    }
+  };
+  return {
+    createLoader(): Promise<BookLoader> {
+      return load(file).default.buildLoader(docsDir, loadChapter);
+    },
+    async loadChapter(): Promise<Chapter> {
+      const chapter = await loadChapter(command.chapter);
+      if (chapter) {
+        return chapter;
+      }
+      throw new Error(`no assertions for chapter:${command.chapter}`);
+    },
+    command,
+  };
 };
 
-const run = ({ argv, outDir, docs, loader }: Settings) => {
-  const command = createCommand(argv);
-  const chapter = () => {
-    return loader(path.resolve(outDir, docs, command.chapter));
-  };
+async function promiseOf(settings: Settings): Promise<void> {
+  const { command, createLoader, loadChapter } = parse(settings);
+  if (command.serve) {
+    return serve(createLoader)({
+      src: settings.docsDir,
+      dst: settings.gitbookRoot,
+    });
+  }
   if (command.chapter && command.section && command.single) {
-    return chapter().assertSection(command.section);
+    return (await loadChapter()).assertSection(command.section);
   }
   if (command.chapter && command.single) {
-    return chapter().assertSections();
+    return (await loadChapter()).assertSections();
   }
-  throw new Error("not implemented");
-};
+  throw new Error("invalid pattern");
+}
 
 export const main = (settings: Settings) => {
-  run(settings).catch(err => {
+  promiseOf(settings).catch(err => {
     console.error("[unexpected]", err);
     if (err.stdout) {
       console.error("[stdout]", err.stdout);

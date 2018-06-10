@@ -2,20 +2,29 @@
   "name": "play-book",
   "version": "0.0.1",
   "description": "",
-  "main": "docs-gen/general/main.js",
   "scripts": {
-    "gitbook": "gitbook serve",
+    "gitbook:serve": "gitbook serve ./book-assert.docs",
+    "gitbook:install": "gitbook install ./book-assert.docs",
     "build:ts": "$(npm bin)/tsc --project .",
-    "test": "NODE_PATH=./docs-gen/general node ./docs-gen/index.js"
+    "serve": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js --serve",
+    "test": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js"
   },
-  "author": "",
+  "author": "x7c1",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "chokidar": "^2.0.3",
     "commander": "^2.15.1",
+    "fs-extra": "^6.0.1",
     "gitbook-cli": "^2.3.2",
-    "gitbook-plugin-anchors": "^0.7.1"
+    "gitbook-plugin-anchorjs": "^2.0.0",
+    "markdown-it": "^8.4.1"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.7",
+    "@types/chokidar": "^1.7.5",
+    "@types/fs-extra": "^5.0.2",
+    "@types/markdown-it": "0.0.4",
     "@types/node": "^9.6.6",
     "prettier": "^1.12.1",
     "tslint": "^5.9.1",

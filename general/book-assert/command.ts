@@ -3,10 +3,8 @@ import { Command } from "commander";
 export const createCommand: (argv: string[]) => Command = argv =>
   new Command()
     .version("0.0.1")
-    .option("--chapter <number>", "chapter to assert", n => {
-      const i = parseInt(n, 10);
-      return isNaN(i) ? "" : i.toString().padStart(3, "0");
-    })
-    .option("--section <title>", "section to assert")
-    .option("--single", "assert only given chapter (or its section)")
+    .option("--serve", "Build then serve the gitbook files")
+    .option("--chapter <number>", "Chapter to assert")
+    .option("--section <title>", "Section to assert")
+    .option("--single", "Assert only given chapter (or its section)")
     .parse(argv);

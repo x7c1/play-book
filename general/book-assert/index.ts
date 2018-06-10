@@ -1,4 +1,5 @@
-import { Chapter } from "./Chapter";
-import { run } from "./run";
-import { main } from "./main";
-export { Chapter, main, run };
+export { BookLoader } from "./BookLoader";
+export { BookIndexer } from "./BookIndexer";
+export { Chapter } from "./Chapter";
+export { main } from "./main";
+export { run } from "./run";

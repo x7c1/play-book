@@ -1,0 +1,9 @@
+{
+  "title" : "API on Play Framework",
+  "plugins" : ["anchorjs"],
+  "pluginsConfig": {
+    "anchorjs": {
+      "selector": "h2"
+    }
+  }
+}
