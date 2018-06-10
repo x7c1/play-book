@@ -1,5 +1,5 @@
 {
-  "root" : "book-assert.docs",
+  "title" : "API on Play Framework",
   "plugins" : ["anchorjs"],
   "pluginsConfig": {
     "anchorjs": {
