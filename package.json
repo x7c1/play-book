@@ -9,7 +9,10 @@
     "serve": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js --serve",
     "test": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js"
   },
-  "scripts": {},
+  "scripts": {
+    "sample:build": "tsc --build projects/sample-book",
+    "sample": "NODE_PATH=./dist node ./dist/sample-book"
+  },
   "author": "x7c1",
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
