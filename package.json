@@ -10,6 +10,8 @@
     "test": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js"
   },
   "scripts": {
+    "tsfmt:replace": "find ./projects -name 'tsconfig.json' | sed -e 's/tsconfig.json//' | sed -e 's/^/tsfmt --replace --baseDir /' | sh",
+    "tsfmt:verify": "find ./projects -name '*.ts' | xargs tsfmt --verify",
     "sample:build": "tsc --build projects/sample-book",
     "sample": "NODE_PATH=./dist node ./dist/sample-book"
   },
