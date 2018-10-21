@@ -14,6 +14,8 @@
     "tslint:fix": "./scripts/projects.sh 'tslint --fix --project'",
     "tsfmt:replace": "./scripts/projects.sh 'tsfmt --replace --baseDir'",
     "tsfmt:verify": "find ./projects -name '*.ts' | xargs tsfmt --verify",
+    "lint": "npm run tsfmt:verify && npm run tslint",
+    "format": "npm run tsfmt:replace && npm run tslint:fix",
     "sample:build": "tsc --build projects/sample-book",
     "sample": "NODE_PATH=./dist node ./dist/sample-book"
   },
