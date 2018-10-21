@@ -1,10 +1,7 @@
 {
-  "rulesDirectory": [
-    "tslint-plugin-prettier"
-  ],
+  "rulesDirectory": [],
   "extends": [
-    "tslint-config-standard",
-    "tslint-config-prettier"
+    "tslint-config-standard"
   ],
   "rules": {
     // https://palantir.github.io/tslint/rules/trailing-comma/
@@ -15,6 +12,7 @@
         "singleline": "never"
       }
     ],
+    // https://palantir.github.io/tslint/rules/quotemark/
     "quotemark": [
       true,
       "double",
@@ -23,13 +21,10 @@
     ],
     // https://palantir.github.io/tslint/rules/no-empty/
     "no-empty": false,
-    "prettier": [
+    // https://palantir.github.io/tslint/rules/max-line-length/
+    "max-line-length": [
       true,
-      {
-        // https://prettier.io/docs/en/options.html#trailing-commas
-        "trailingComma": "all",
-        "tabWidth": 2
-      }
+      90
     ]
   }
 }
