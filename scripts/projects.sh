@@ -15,4 +15,5 @@ do
     line="${cmd} ${path}"
     echo "> ${line}"
     ${line}
+    echo "(exited with $?)"
 done
