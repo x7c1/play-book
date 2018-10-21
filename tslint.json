@@ -15,6 +15,12 @@
         "singleline": "never"
       }
     ],
+    "quotemark": [
+      true,
+      "double",
+      "avoid-escape",
+      "avoid-template"
+    ],
     // https://palantir.github.io/tslint/rules/no-empty/
     "no-empty": false,
     "prettier": [
