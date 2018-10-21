@@ -10,6 +10,7 @@ TS_NODE_PROJECT="${project}/tsconfig.json"\
  --require ts-node/register\
  --require tsconfig-paths/register\
  "${project}/**/*.spec.ts"
+EOS
 )
 echo "> ${line}"
 eval ${line}
