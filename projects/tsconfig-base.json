@@ -10,5 +10,8 @@
     "strictNullChecks": true,
     "outDir" : "dist",
     "target": "es5"
-  }
+  },
+  "exclude": [
+    "**/*.spec.ts"
+  ]
 }
