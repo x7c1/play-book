@@ -10,9 +10,9 @@
     "test": "NODE_PATH=./book-assert.ts.gen/general node ./book-assert.ts.gen/index.js"
   },
   "scripts": {
-    "tslint": "find ./projects -name 'tsconfig.json' | sed -e 's/tsconfig.json/ --format verbose/' | sed -e 's/^/tslint --project /' | sh",
-    "tslint:fix": "find ./projects -name 'tsconfig.json' | sed -e 's/tsconfig.json/ --format verbose/' | sed -e 's/^/tslint --fix --project /' | sh",
-    "tsfmt:replace": "find ./projects -name 'tsconfig.json' | sed -e 's/tsconfig.json//' | sed -e 's/^/tsfmt --replace --baseDir /' | sh",
+    "tslint": "./scripts/projects.sh 'tslint --project'",
+    "tslint:fix": "./scripts/projects.sh 'tslint --fix --project'",
+    "tsfmt:replace": "./scripts/projects.sh 'tsfmt --replace --baseDir'",
     "tsfmt:verify": "find ./projects -name '*.ts' | xargs tsfmt --verify",
     "sample:build": "tsc --build projects/sample-book",
     "sample": "NODE_PATH=./dist node ./dist/sample-book"
