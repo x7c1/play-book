@@ -18,7 +18,7 @@
     "format": "npm run tsfmt:replace && npm run tslint:fix",
     "test": "./scripts/projects.sh ./scripts/mocha-all.sh",
     "sample:test": "./scripts/mocha-all.sh ./projects/sample-book",
-    "sample:build": "tsc --build projects/sample-book",
+    "sample:build": "tsc --build ./projects/sample-book",
     "sample": "NODE_PATH=./dist node ./dist/sample-book"
   },
   "author": "x7c1",

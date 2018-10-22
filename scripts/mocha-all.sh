@@ -4,4 +4,4 @@ set -eu
 
 project=$1
 
-./scripts/mocha.sh ${project} "${project}/**/*.spec.ts"
+./scripts/mocha.sh "${project}/**/*.spec.ts"
