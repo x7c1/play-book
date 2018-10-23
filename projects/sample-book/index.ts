@@ -1,3 +1,3 @@
-import { world } from "./sample"
+import { greeting } from "./sample"
 
-console.log(world)
+console.log(greeting)

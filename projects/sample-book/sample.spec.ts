@@ -1,8 +1,8 @@
-import { world } from "./sample"
+import { greeting } from "./sample"
 import { expect } from "chai"
 
-describe("hello", () => {
+describe("greeting", () => {
   it("should return hello world", () => {
-    expect(world).to.equal("hello, world")
+    expect(greeting).to.equal("hello, world!")
   })
 })
