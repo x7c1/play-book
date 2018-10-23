@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "declaration": true,
     "lib": ["es6", "es2017"],
     "noEmitOnError": true,
@@ -8,19 +7,11 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "outDir": "book-assert.ts.gen",
-    "paths": {
-      "book-assert": ["./general/book-assert"]
-    },
-    "strict": true,
+    "strictNullChecks": true,
+    "outDir" : "dist",
     "target": "es5"
   },
-  "include": [
-    "index.ts",
-    "docs/**/*.ts",
-    "general/**/*.ts"
-  ],
   "exclude": [
-    "node_modules"
+    "**/*.spec.ts"
   ]
 }

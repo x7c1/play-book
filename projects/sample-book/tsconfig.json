@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "../../dist/sample-book",
+    "paths": {
+      "book-assert/*": [
+        "../book-assert/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../book-assert"
+    }
+  ]
+}

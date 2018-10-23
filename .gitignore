@@ -1,17 +1,12 @@
+*.log
+*.tmp
+dist
+
 # mac
 .DS_Store
 
 # node.js
 node_modules
-
-# gitbook
-book-assert.docs/_book
-
-# book-assert
-book-assert.ts.gen
-
-# play-book
-hello-tutorial
 
 # IntelliJ
 .idea
