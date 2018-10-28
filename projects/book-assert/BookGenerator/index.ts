@@ -5,6 +5,7 @@ interface ContentsLocation {
 
 interface BookStructure {
   start?: ContentsLocation
+  chapters: ContentsLocation[]
   chapter (num: number): ContentsLocation
 }
 
@@ -23,7 +24,11 @@ export class BookGenerator {
 
   run (): BookStructure {
     const f = (n: number) => this.chapterPaths[n - 1]
+    const chapters = this.chapterPaths.map((path, index) => ({
+      relativePath: f(index),
+    }))
     return {
+      chapters,
       start: this.startPath ?
         { relativePath: this.startPath } :
         undefined,
