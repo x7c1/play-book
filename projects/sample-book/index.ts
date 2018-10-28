@@ -1,3 +1,8 @@
-import { greeting } from "./sample"
+import { BookGenerator, start } from "book-assert/BookGenerator"
 
-console.log(greeting)
+export const generator: BookGenerator =
+  start("./intro")
+    .chapters([
+      "./about",
+      "./setup",
+    ])
