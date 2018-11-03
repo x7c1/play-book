@@ -3,9 +3,9 @@ import { generator } from "../index"
 
 describe("book.start", () => {
   const book = generator.run()
+  const intro = book.findDivision("./intro")!
 
   it("should have a relative path", () => {
-    const start = book.start!
-    expect(start.relativePath).to.equal("./intro")
+    expect(intro.relativePath).to.equal("./intro")
   })
 })

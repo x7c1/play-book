@@ -1,39 +1,44 @@
 
-interface ContentsLocation {
+interface BookDivision {
   relativePath: string
 }
 
 interface BookStructure {
-  start?: ContentsLocation
-  chapters: ContentsLocation[]
-  findChapterByNumber (num: number): ContentsLocation | undefined
+  findDivision (relativePath: string): BookDivision | undefined
+  countDivisions (): number
+  intro?: BookDivision
 }
 
 export class BookGenerator {
   constructor (
-    readonly startPath?: string,
+    readonly introPath?: string,
     readonly chapterPaths: string[] = []) {
   }
 
   chapters (paths: string[]): BookGenerator {
     return new BookGenerator(
-      this.startPath,
+      this.introPath,
       this.chapterPaths.concat(paths),
     )
   }
 
   run (): BookStructure {
-    const chapters = this.chapterPaths.map((path, index) => ({
+    const intro = this.introPath ?
+      [{ relativePath: this.introPath }] :
+      []
+
+    const chapters = this.chapterPaths.map(path => ({
       relativePath: path,
     }))
+    const divisions = intro.concat(chapters)
     return {
-      chapters,
-      start: this.startPath ?
-        { relativePath: this.startPath } :
-        undefined,
-      findChapterByNumber (num: number) {
-        return chapters[num - 1]
+      findDivision (relativePath: string) {
+        return divisions.find(_ => _.relativePath === relativePath)
       },
+      countDivisions () {
+        return divisions.length
+      },
+      intro: intro[0],
     }
   }
 }

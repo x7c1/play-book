@@ -1,11 +1,11 @@
 import { expect } from "chai"
 import { generator } from "../index"
 
-describe("chapter.2", () => {
+describe("chapter [./setup]", () => {
   const book = generator.run()
-  const chapter1 = book.findChapterByNumber(2)!
+  const chapter = book.findDivision("./setup")!
 
   it("should have a relative path", () => {
-    expect(chapter1.relativePath).to.equal("./setup")
+    expect(chapter.relativePath).to.equal("./setup")
   })
 })
